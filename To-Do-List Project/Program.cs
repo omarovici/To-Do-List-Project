@@ -1,5 +1,6 @@
-
 namespace To_Do_List_Project;
+using Microsoft.EntityFrameworkCore;
+using To_Do_List_Project.Data;
 
 public class Program
 {
@@ -8,7 +9,8 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-
+        builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
