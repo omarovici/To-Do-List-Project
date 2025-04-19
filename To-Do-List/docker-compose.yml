@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - redis
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=db;Database=todolist;User Id=sa;Password=YourStrong!Passw0rd;
+      - Redis__Host=redis
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourStrong!Passw0rd
+      - MSSQL_PID=Express
+    volumes:
+      - sql_data:/var/opt/mssql
+    ports:
+      - "1433:1433"
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+volumes:
+  sql_data:
